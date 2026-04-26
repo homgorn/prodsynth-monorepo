@@ -1,0 +1,392 @@
+# ProdSynth Kubernetes manifests
+# EKS/GKE deployment with autoscaling, monitoring, ingress
+
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prodsynth
+  labels:
+    app: prodsynth
+    environment: production
+
+---
+# ConfigMap: environment variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prodsynth-config
+  namespace: prodsynth
+data:
+  LOG_LEVEL: "info"
+  NODE_ENV: "production"
+  NEXT_PUBLIC_API_URL: "http://prodsynth-backend:8000"
+  NEO4J_URI: "bolt://prodsynth-neo4j:7687"
+  REDIS_URL: "redis://prodsynth-redis:6379"
+  DATABASE_URL: "postgresql://prodsynth:changeme@prodsynth-postgres:5432/prodsynth"
+
+---
+# Secret: sensitive credentials (use AWS Secrets Manager / Sealed Secrets in production)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prodsynth-secrets
+  namespace: prodsynth
+type: Opaque
+stringData:
+  STRIPE_API_KEY: "sk_live_placeholder"
+  JWT_SECRET: "changeme-in-production"
+  NEO4J_PASSWORD: "changeme"
+  POSTGRES_PASSWORD: "changeme"
+  GRAFANA_PASSWORD: "changeme"
+
+---
+# Backend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prodsynth-backend
+  namespace: prodsynth
+  labels:
+    app: prodsynth-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prodsynth-backend
+  template:
+    metadata:
+      labels:
+        app: prodsynth-backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/homgorn/prodsynth-monorepo/backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+            - containerPort: 50051
+              name: grpc
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          envFrom:
+            - configMapRef:
+                name: prodsynth-config
+            - secretRef:
+                name: prodsynth-secrets
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 2
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+---
+# Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prodsynth-backend
+  namespace: prodsynth
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: http
+    - port: 50051
+      targetPort: 50051
+      name: grpc
+  selector:
+    app: prodsynth-backend
+
+---
+# Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prodsynth-frontend
+  namespace: prodsynth
+  labels:
+    app: prodsynth-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prodsynth-frontend
+  template:
+    metadata:
+      labels:
+        app: prodsynth-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/homgorn/prodsynth-monorepo/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: prodsynth-config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prodsynth-frontend
+  namespace: prodsynth
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: prodsynth-frontend
+
+---
+# Horizontal Pod Autoscaler: Backend
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: prodsynth-backend-hpa
+  namespace: prodsynth
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prodsynth-backend
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+---
+# Ingress (NGINX)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prodsynth-ingress
+  namespace: prodsynth
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+spec:
+  tls:
+    - hosts:
+        - prodsynth.com
+        - www.prodsynth.com
+      secretName: prodsynth-tls
+  rules:
+    - host: prodsynth.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prodsynth-frontend
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: prodsynth-backend
+                port:
+                  number: 8000
+          - path: /grpc
+            pathType: Prefix
+            backend:
+              service:
+                name: prodsynth-backend
+                port:
+                  number: 50051
+
+---
+# Neo4j StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prodsynth-neo4j
+  namespace: prodsynth
+spec:
+  serviceName: prodsynth-neo4j
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prodsynth-neo4j
+  template:
+    metadata:
+      labels:
+        app: prodsynth-neo4j
+    spec:
+      containers:
+        - name: neo4j
+          image: neo4j:5.15-community
+          ports:
+            - containerPort: 7474
+              name: browser
+            - containerPort: 7687
+              name: bolt
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2Gi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+          env:
+            - name: NEO4J_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: prodsynth-secrets
+                  key: NEO4J_PASSWORD
+            - name: NEO4J_dbms_memory_heap_initial__size
+              value: "512m"
+            - name: NEO4J_dbms_memory_heap_max__size
+              value: "2g"
+---
+# Neo4j Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prodsynth-neo4j
+  namespace: prodsynth
+spec:
+  clusterIP: None
+  ports:
+    - port: 7474
+      targetPort: 7474
+    - port: 7687
+      targetPort: 7687
+  selector:
+    app: prodsynth-neo4j
+
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prodsynth-redis
+  namespace: prodsynth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prodsynth-redis
+  template:
+    metadata:
+      labels:
+        app: prodsynth-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prodsynth-redis
+  namespace: prodsynth
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: prodsynth-redis
+
+---
+# PostgreSQL (Cloud SQL / RDS in production - shown here as placeholder)
+apiVersion: v1
+kind: Service
+metadata:
+  name: prodsynth-postgres
+  namespace: prodsynth
+spec:
+  type: ExternalName
+  externalName: prodsynth-postgres.us-central1.sql.google.com
+
+---
+# PodDisruptionBudget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: prodsynth-backend-pdb
+  namespace: prodsynth
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: prodsynth-backend

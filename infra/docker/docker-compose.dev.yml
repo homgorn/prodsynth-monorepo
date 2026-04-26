@@ -1,0 +1,127 @@
+# ProdSynth Development Docker Stack
+# Full local development with hot reload
+
+services:
+  backend:
+    build:
+      context: ../apps/backend
+      dockerfile: Dockerfile.dev
+    image: prodsynth/backend:dev
+    container_name: prodsynth-backend-dev
+    restart: "no"
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      - LOG_LEVEL=debug
+      - NEO4J_URI=bolt://neo4j:7687
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://prodsynth:prodsynth123@postgres:5432/prodsynth
+      - STRIPE_API_KEY=${STRIPE_API_KEY:-sk_test_placeholder}
+    volumes:
+      - ../apps/backend:/app
+      - /app/__pycache__
+      - ../packages:/packages
+    depends_on:
+      - neo4j
+      - redis
+      - postgres
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    networks:
+      - prodsynth-dev
+
+  frontend:
+    build:
+      context: ../apps/frontend
+      dockerfile: Dockerfile.dev
+    image: prodsynth/frontend:dev
+    container_name: prodsynth-frontend-dev
+    restart: "no"
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - ../apps/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    command: npm run dev
+    networks:
+      - prodsynth-dev
+
+  neo4j:
+    image: neo4j:5.15-community
+    container_name: prodsynth-neo4j-dev
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/prodsynth123
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j-data:/data
+    networks:
+      - prodsynth-dev
+
+  redis:
+    image: redis:7-alpine
+    container_name: prodsynth-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - prodsynth-dev
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: prodsynth-postgres-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=prodsynth
+      - POSTGRES_USER=prodsynth
+      - POSTGRES_PASSWORD=prodsynth123
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - prodsynth-dev
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prodsynth-prometheus-dev
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.dev.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - prodsynth-dev
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: prodsynth-grafana-dev
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - prodsynth-dev
+
+volumes:
+  neo4j-data:
+  redis-data:
+  postgres-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  prodsynth-dev:
+    driver: bridge
