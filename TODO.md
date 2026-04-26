@@ -61,21 +61,14 @@ _Статус: Active | Обновлено: 26.04.2026_
 
 ---
 
-## 🏗️ Phase 4: Polish & Launch (Неделі 13–14) — НАСТУПНИЙ КРОК
-
-### Performance & Testing
-- [ ] Провести нагрузочне тестування (k6).
-- [ ] Додати i18n (RU, EN, ZH-CN) через `next-intl`.
-
-### NEW: Product DNA
-- [ ] **"Product DNA" система** (збереження "генетичного кода" продукту).
-- [ ] **"First Product Challenge"** (місяць Pro бесплатно за деплой за 24 години).
-
-### Documentation
-- [ ] `docs/architecture.md` (C4 model: Context, Containers, Components).
-- [ ] `docs/security.md` (OWASP, секрети, аудит).
-- [ ] `docs/licensing-and-ip.md` (IP, ліцензії, GPL-сумісність).
-- [ ] `docs/cost-optimization.md` (економіка токенів).
-- [ ] `docs/multi-tenancy.md` (ізоляція даних).
-- [ ] `docs/activation-flow.md` (шлях користувача від реєстрації до "aha moment").
-- [ ] `docs/marketplace.md` (як створювати шаблони).
+### Phase 4: Polish & Launch (Completed 26.04.2026)
+- [x] k6 load test config: 10→50→100→200 RPS stages (`tests/load/api-load-test.js`).
+- [x] i18n setup: EN/RU/ZH-CN with locale detection middleware (`apps/frontend/src/i18n/`).
+- [x] `docs/architecture.md` (C4 model: Context, Containers, Components, APIs).
+- [x] `docs/security.md` (OWASP Top 10, GDPR, audit logging, incident response).
+- [x] `docs/multi-tenancy.md` (RLS, Neo4j isolation, plan limits, GDPR).
+- [x] `docs/activation-flow.md` (signup → dashboard → synthesis → deploy → upgrade funnel).
+- [x] `docs/cost-optimization.md` (cascading LLM, token budgets, Graphiti cache, ROI).
+- [x] `docs/licensing-and-ip.md` (LicenseChecker, GPL contamination, user ownership, DMCA).
+- [x] `docs/marketplace.md` (template structure, publishing, search, revenue 70/30 split).
+- [x] Push to GitHub: 19 commits total.
