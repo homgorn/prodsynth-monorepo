@@ -4,7 +4,7 @@ _Статус: Active | Обновлено: 26.04.2026_
 
 ---
 
-## ✅ Done (Завершено)
+## ✅ Done (Повний список)
 
 ### Phase 0: Infrastructure & Core (Completed 26.04.2026)
 - [x] Создати монорепо `prodsynth-monorepo` (TurboRepo).
@@ -35,6 +35,7 @@ _Статус: Active | Обновлено: 26.04.2026_
 ### Phase 2: Product Assembly (Completed 26.04.2026)
 - [x] Створити `packages/agents/code.py` (CodeAgent з cascading LLM).
 - [x] Створити `packages/agents/test.py` (TestAgent з pytest/Playwright).
+- [x] Створити `packages/agents/deploy.py` (DeployAgent).
 - [x] Реалізувати `apps/frontend/next.config.mjs` (Next.js config).
 - [x] Реалізувати `apps/frontend/tailwind.config.ts`.
 - [x] Створити `apps/frontend/src/app/layout.tsx` (JSON-LD, SEO, GitHub links).
@@ -42,45 +43,39 @@ _Статус: Active | Обновлено: 26.04.2026_
 - [x] Створити `specs/openapi.yaml` (OpenAPI 3.1).
 - [x] Реалізувати `apps/backend/Dockerfile`.
 - [x] Реалізувати `apps/frontend/Dockerfile`.
-- [x] Зробити коміт: "feat: Phase 0-1 infrastructure + Landing Page".
-- [x] Створити UI компоненти: `button.tsx`, `card.tsx`, `input.tsx`, `badge.tsx`, `accordion.tsx`, `tabs.tsx`, `theme-provider.tsx`.
+- [x] Створити UI компоненти: button, card, input, badge, accordion, tabs, theme-provider.
 - [x] Створити `apps/frontend/src/app/dashboard/page.tsx` (Dashboard).
 - [x] Створити `docs/api.md` (API Documentation).
-- [x] Зробити коміт: "feat: Phase 2 - CodeAgent, TestAgent, Dashboard".
+- [x] Створити `docs/agents.md` (All 12 agents described).
+
+### Phase 3: Marketplace & Enterprise (Completed 26.04.2026)
+- [x] Створити Marketplace API endpoints (`apps/backend/routes/marketplace.py`).
+- [x] Marketplace UI: search, category tabs, template cards, favorites (`apps/frontend/src/app/marketplace/page.tsx`).
+- [x] Stripe Billing: plans (Free/Pro $49/Enterprise $999), subscriptions, webhooks (`apps/backend/routes/billing.py`).
+- [x] RBAC & SSO: owner/admin/editor/viewer/billing_admin roles, Google/GitHub/Okta/Azure SSO (`apps/backend/routes/rbac.py`).
+- [x] WebhookNotifier: Slack, Telegram, custom URLs (`packages/agents/webhook.py`).
+- [x] Multi-tenancy models: Workspace, Tenant, plan-based limits (`packages/models/workspace.py`, `packages/models/tenant.py`).
+- [x] TenantMiddleware: workspace isolation via X-Workspace-ID header (`apps/backend/middleware/tenant.py`).
+- [x] AuditEvent model: full action taxonomy (auth, project, billing, team, sso) (`packages/models/audit.py`).
+- [x] Push to GitHub: https://github.com/homgorn/prodsynth-monorepo.
 
 ---
 
-## 🏗️ Phase 3: Marketplace & Enterprise (Неделі 9–12) — НАЧИНАЕМ
+## 🏗️ Phase 4: Polish & Launch (Неделі 13–14) — НАСТУПНИЙ КРОК
 
-### Marketplace & Billing
-- [ ] Создать Marketplace API (CRUD для шаблонів).
-- [ ] Реалізувати Stripe-біллінг (підписки, usage-based).
-- [ ] Додати RBAC і SSO (SAML/OIDC) для Enterprise.
-- [ ] Створити `docs/marketplace.md` (як створювати шаблони).
-- [ ] Створити `packages/agents/deploy.py` (DeployAgent — Render/Fly.io API).
-
-### Frontend (Full)
+### Performance & Testing
 - [ ] Провести нагрузочне тестування (k6).
-- [ ] Додати i18n (RU, EN, ZH-CN) у базові `next-intl`.
-- [ ] Створити `src/app/marketplace/page.tsx` (Marketplace UI).
+- [ ] Додати i18n (RU, EN, ZH-CN) через `next-intl`.
 
-### NEW: Activation & Multi-tenancy
-- [ ] **`WebhookNotifier`** (уведомлення в Slack/Telegram).
-- [ ] **Multi-tenancy** (Schema-per-tenant у Neo4j, Data Residency для GDPR).
-- [ ] **"Product DNA" система** (збереження "генетичного коду" продукту).
+### NEW: Product DNA
+- [ ] **"Product DNA" система** (збереження "генетичного кода" продукту).
 - [ ] **"First Product Challenge"** (місяць Pro бесплатно за деплой за 24 години).
 
-### Documentation (Continuous)
+### Documentation
 - [ ] `docs/architecture.md` (C4 model: Context, Containers, Components).
-- [ ] `docs/agents.md` (описання всіх агентів і їх ролей).
 - [ ] `docs/security.md` (OWASP, секрети, аудит).
-- [ ] **NEW:** `docs/licensing-and-ip.md` (IP, ліцензії, GPL-сумісність).
-- [ ] **NEW:** `docs/cost-optimization.md` (економіка токенів).
-- [ ] **NEW:** `docs/multi-tenancy.md` (ізоляція даних).
-- [ ] **NEW:** `docs/activation-flow.md` (шлях користувача від реєстрації до "aha moment").
-
----
-
-## ✅ Done (Заповнюється по ходу)
-
-_(Пока пусто — починаємо Phase 3)_
+- [ ] `docs/licensing-and-ip.md` (IP, ліцензії, GPL-сумісність).
+- [ ] `docs/cost-optimization.md` (економіка токенів).
+- [ ] `docs/multi-tenancy.md` (ізоляція даних).
+- [ ] `docs/activation-flow.md` (шлях користувача від реєстрації до "aha moment").
+- [ ] `docs/marketplace.md` (як створювати шаблони).

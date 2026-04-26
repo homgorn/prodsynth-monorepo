@@ -21,6 +21,38 @@
 
 ---
 
+## 📐 Phase 3: Marketplace & Enterprise
+
+### Marketplace (`/marketplace`)
+- Template grid with search, category tabs (SaaS, API, Dashboard, Favorites)
+- 5 mock templates: SaaS Starter, API Service, Dashboard & Analytics, E-commerce, Data Pipeline
+- Preview, download, ratings, favorites
+
+### Billing (`/api/v1/billing`)
+- **Plans:** Free ($0), Pro ($49/mo, $470/yr), Enterprise ($999/mo, $9990/yr)
+- Subscription lifecycle: create, update, cancel
+- Stripe webhooks for payment events
+- Usage tracking: tokens, graph storage, API calls
+
+### RBAC & SSO (`/api/v1/auth`)
+- **Roles:** owner, admin, editor, viewer, billing_admin
+- **SSO Providers:** Google Workspace, GitHub OAuth2, Okta SAML, Azure AD OIDC
+- Team management: invite, role change, remove
+- Audit log with full action taxonomy
+
+### Multi-tenancy (`/api/v1/workspaces`)
+- **Workspace isolation:** PostgreSQL RLS + workspace_id on all tables
+- **TenantMiddleware:** X-Workspace-ID header enforcement
+- **Plan-based limits:** projects, team members, storage, token budget
+- Workspace settings: SSO enforcement, email domains, audit retention
+
+### Enterprise Extras
+- WebhookNotifier: Slack, Telegram, custom URLs
+- AuditEvent model: auth, project, billing, team, sso, workspace actions
+- SAML metadata endpoint, SSO callback with JWT
+
+---
+
 ## 🚀 Quick Start (5 минут до продукта)
 
 ### 1. Install CLI
