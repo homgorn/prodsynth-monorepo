@@ -73,14 +73,14 @@ export default function HomePage() {
             <a href="#marketplace" className="text-sm font-medium text-muted-foreground hover:text-foreground">
               Marketplace
             </a>
-            <a href="https://github.com/prodsynth/monorepo/blob/main/docs/README.md" className="text-sm font-medium text-muted-foreground hover:text-foreground" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/homgorn/prodsynth-monorepo/blob/main/README.md" className="text-sm font-medium text-muted-foreground hover:text-foreground" target="_blank" rel="noopener noreferrer">
               Docs
             </a>
           </div>
 
           <div className="hidden md:flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
-              <a href="https://github.com/prodsynth/monorepo" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/homgorn/prodsynth-monorepo" target="_blank" rel="noopener noreferrer">
                 <Github className="mr-2 h-4 w-4" />
                 GitHub
               </a>
@@ -116,12 +116,12 @@ export default function HomePage() {
             <a href="#marketplace" className="block text-sm font-medium text-muted-foreground hover:text-foreground">
               Marketplace
             </a>
-            <a href="https://github.com/prodsynth/monorepo/blob/main/docs/README.md" className="block text-sm font-medium text-muted-foreground hover:text-foreground" target="_blank">
+            <a href="https://github.com/homgorn/prodsynth-monorepo/blob/main/README.md" className="block text-sm font-medium text-muted-foreground hover:text-foreground" target="_blank">
               Docs
             </a>
             <div className="flex gap-2 pt-2">
               <Button variant="ghost" size="sm" className="flex-1" asChild>
-                <a href="https://github.com/prodsynth/monorepo" target="_blank">
+                <a href="https://github.com/homgorn/prodsynth-monorepo" target="_blank">
                   <Github className="mr-2 h-4 w-4" />
                   GitHub
                 </a>
@@ -163,7 +163,7 @@ export default function HomePage() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
-                <a href="https://github.com/prodsynth/monorepo" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/homgorn/prodsynth-monorepo" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-4 w-4" />
                   View on GitHub
                 </a>
@@ -754,7 +754,7 @@ export default function HomePage() {
               className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
               asChild
             >
-              <a href="https://github.com/prodsynth/monorepo" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/homgorn/prodsynth-monorepo" target="_blank" rel="noopener noreferrer">
                 <Github className="mr-2 h-4 w-4" />
                 Star on GitHub
               </a>

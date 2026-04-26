@@ -1,6 +1,6 @@
 # 🚀 ProdSynth — AI-Native Product Synthesis Engine
 
-[![Build Status](https://img.shields.io/github/actions/workflows/ci.yml/prodsynth/monorepo/main?label=build)](https://github.com/prodsynth/monorepo/actions)
+[![Build Status](https://img.shields.io/github/actions/workflows/ci.yml/homgorn/prodsynth-monorepo/main?label=build)](https://github.com/homgorn/prodsynth-monorepo/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Twitter Follow](https://img.shields.io/twitter/follow/prodsynth?label=Follow&style=flat)](https://twitter.com/prodsynth)
 
@@ -118,7 +118,7 @@ prodsynth-monorepo/
 | [Context Map](CONTEXT_MAP.md) | Visual connections between all components |
 | [TODO List](TODO.md) | Phase-by-phase task list (12 weeks) |
 | [API Spec](specs/openapi.yaml) | OpenAPI 3.1 specification |
-| [Agents](docs/agents.md) | All 12+ agents and their roles |
+| [Agents](docs/agents.md) | All 12+ agents and their roles (placeholder — see [CHAT_ARCHITECTURE.md](CHAT_ARCHITECTURE.md) for full agent list) |
 
 ---
 
@@ -186,7 +186,7 @@ prodsynth-monorepo/
 ## 🤝 Contributing
 
 ```bash
-git clone https://github.com/prodsynth/monorepo.git
+git clone https://github.com/homgorn/prodsynth-monorepo.git
 cd monorepo
 npm install # or bun install
 docker-compose up -d # Neo4j, Redis, NATS, Loki

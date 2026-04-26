@@ -146,42 +146,38 @@ docs/
 
 ### A — ACTIONS (Фазы и TODO)
 
-#### Phase 0: Infrastructure & Core (Недели 0–1)
-**TODO:**
-- [ ] Создать монорепо `prodsynth-monorepo` (TurboRepo).
-- [ ] Настроить Docker Compose (Neo4j, Redis, NATS, PostgreSQL, Loki, Grafana).
-- [ ] Реализовать `prodsynth-cli` (npm пакет) с командами: `init`, `analyze`, `generate`.
-- [ ] Настроить GitHub Actions: линтеры, тесты, сборка Docker-образов.
-- [ ] Интегрировать `openclaude` как подмодуль `core/engine`.
+#### Phase 0: Infrastructure & Core (Недели 0–1) ✅ COMPLETE
+- [x] Создать монорепо `prodsynth-monorepo` (TurboRepo).
+- [x] Настроить Docker Compose (Neo4j, Redis, NATS, PostgreSQL, Loki, Grafana).
+- [x] Реализовать `prodsynth-cli` (npm пакет) с командами: `init`, `analyze`, `generate`.
+- [x] Настроить GitHub Actions: линтеры, тесты, сборка Docker-образов.
+- [x] Интегрировать `openclaude` как подмодуль `core/engine`.
 
-#### Phase 1: Synthesis Engine (Недели 2–4)
-**TODO:**
-- [ ] Реализовать AST-парсер репозиториев (Python/TS/Go).
-- [ ] Настроить Graphiti-адаптер для сохранения графов.
-- [ ] Создать агента `ResearchAgent` (поиск в репозитории + формирование ТЗ).
-- [ ] Создать агента `ArchitectAgent` (генерация C4-моделей и выбор tech stack).
-- [ ] Написать 50+ unit-тестов для `core/synthesis`.
-- [ ] **NEW:** `LicenseChecker` агент (проверка лицензий входных репозиториев).
-- [ ] **NEW:** `TokenBudget` механизм (лимит $0.50/запуск).
+#### Phase 1: Synthesis Engine (Недели 2–4) ✅ COMPLETE
+- [x] Реализовать AST-парсер репозиториев (Python/TS/Go).
+- [x] Настроить Graphiti-адаптер для сохранения графов.
+- [x] Создать агента `ResearchAgent` (поиск в репозитории + формирование ТЗ).
+- [x] Создать агента `ArchitectAgent` (генерация C4-моделей и выбор tech stack).
+- [x] Написать 50+ unit-тестов для `core/synthesis`.
+- [x] **NEW:** `LicenseChecker` агент (проверка лицензий входных репозиториев).
+- [x] **NEW:** `TokenBudget` механизм (лимит $0.50/запуск).
 
-#### Phase 2: Product Assembly (Недели 5–8)
-**TODO:**
-- [ ] Реализовать `CodeAgent` (генерация кода через openclaude API).
-- [ ] Реализовать `TestAgent` (автогенерация pytest + playwright).
-- [ ] Создать `DeployAgent` (интеграция с Render/Fly.io API).
-- [ ] Сделать базовый UI (Next.js): дашборд, просмотр графа, логи.
-- [ ] Настроить Sentry для фронтенда и бэкенда.
-- [ ] **NEW:** `SafetyGuard` (Guardrails для агентов, стоп-слова).
+#### Phase 2: Product Assembly (Недели 5–8) ✅ COMPLETE
+- [x] Реализовать `CodeAgent` (генерация кода через openclaude API).
+- [x] Реализовать `TestAgent` (автогенерация pytest + playwright).
+- [x] Создать `DeployAgent` (интеграция с Render/Fly.io API).
+- [x] Сделать базовый UI (Next.js): дашборд, просмотр графа, логи.
+- [x] Настроить Sentry для фронтенда и бэкенда.
+- [x] **NEW:** `SafetyGuard` (Guardrails для агентов, стоп-слова).
 
-#### Phase 3: Marketplace & Enterprise (Недели 9–12)
-**TODO:**
-- [ ] Создать Marketplace API (CRUD для шаблонов).
-- [ ] Реализовать Stripe-биллинг (подписки, usage-based).
-- [ ] Добавить RBAC и SSO (SAML/OIDC) для Enterprise.
-- [ ] Написать SEO-лендинг (Next.js SSG + JSON-LD).
-- [ ] Провести нагрузочное тестирование (k6).
-- [ ] **NEW:** `BackupAgent` (экспорт графов в S3/GCS).
-- [ ] **NEW:** `WebhookNotifier` (уведомления в Slack/Telegram).
+#### Phase 3: Marketplace & Enterprise (Недели 9–12) ✅ COMPLETE
+- [x] Создать Marketplace API (CRUD для шаблонов).
+- [x] Реализовать Stripe-биллинг (подписки, usage-based).
+- [x] Добавить RBAC и SSO (SAML/OIDC) для Enterprise.
+- [x] Сделать SEO-лендинг (Next.js SSG + JSON-LD).
+- [x] Провести нагрузочное тестирование (k6).
+- [x] **NEW:** `BackupAgent` (экспорт графов в S3/GCS).
+- [x] **NEW:** `WebhookNotifier` (уведомления в Slack/Telegram).
 
 ---
 

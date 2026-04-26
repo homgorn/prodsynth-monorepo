@@ -11,7 +11,7 @@ info:
     email: support@prodsynth.com
   license:
     name: MIT
-    url: https://github.com/prodsynth/monorepo/blob/main/LICENSE
+    url: https://github.com/homgorn/prodsynth-monorepo/blob/main/LICENSE
 
 servers:
   - url: https://api.prodsynth.com

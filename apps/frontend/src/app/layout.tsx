@@ -114,10 +114,10 @@ export default function RootLayout({
       ratingCount: "127",
     },
     screenshot: "https://prodsynth.com/screenshot.png",
-    softwareHelp: "https://github.com/prodsynth/monorepo/blob/main/docs/README.md",
+    softwareHelp: "https://github.com/homgorn/prodsynth-monorepo/blob/main/README.md",
     downloadUrl: "https://www.npmjs.com/package/@prodsynth/cli",
     sameAs: [
-      "https://github.com/prodsynth/monorepo",
+      "https://github.com/homgorn/prodsynth-monorepo",
       "https://twitter.com/prodsynth",
       "https://discord.gg/prodsynth",
     ],
@@ -137,13 +137,13 @@ export default function RootLayout({
         "@type": "ListItem",
         position: 2,
         name: "Documentation",
-        item: "https://github.com/prodsynth/monorepo/tree/main/docs",
+        item: "https://github.com/homgorn/prodsynth-monorepo/tree/main/docs",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: "Architecture",
-        item: "https://github.com/prodsynth/monorepo/blob/main/CHAT_ARCHITECTURE.md",
+        item: "https://github.com/homgorn/prodsynth-monorepo/blob/main/CHAT_ARCHITECTURE.md",
       },
     ],
   };
@@ -254,7 +254,7 @@ export default function RootLayout({
                 <ul className="mt-2 space-y-2 text-sm">
                   <li>
                     <a
-                      href="https://github.com/prodsynth/monorepo"
+                      href="https://github.com/homgorn/prodsynth-monorepo"
                       className="text-muted-foreground hover:text-foreground"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -299,7 +299,7 @@ export default function RootLayout({
                 <ul className="mt-2 space-y-2 text-sm">
                   <li>
                     <a
-                      href="https://github.com/prodsynth/monorepo/blob/main/README.md"
+                      href="https://github.com/homgorn/prodsynth-monorepo/blob/main/README.md"
                       className="text-muted-foreground hover:text-foreground"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -309,7 +309,7 @@ export default function RootLayout({
                   </li>
                   <li>
                     <a
-                      href="https://github.com/prodsynth/monorepo/blob/main/CHAT_ARCHITECTURE.md"
+                      href="https://github.com/homgorn/prodsynth-monorepo/blob/main/CHAT_ARCHITECTURE.md"
                       className="text-muted-foreground hover:text-foreground"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -319,7 +319,7 @@ export default function RootLayout({
                   </li>
                   <li>
                     <a
-                      href="https://github.com/prodsynth/monorepo/blob/main/CONTEXT_MAP.md"
+                      href="https://github.com/homgorn/prodsynth-monorepo/blob/main/CONTEXT_MAP.md"
                       className="text-muted-foreground hover:text-foreground"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -329,12 +329,45 @@ export default function RootLayout({
                   </li>
                   <li>
                     <a
-                      href="https://github.com/prodsynth/monorepo/blob/main/TODO.md"
+                      href="https://github.com/homgorn/prodsynth-monorepo/blob/main/TODO.md"
                       className="text-muted-foreground hover:text-foreground"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       TODO List
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold">Contact</h4>
+                <ul className="mt-2 space-y-2 text-sm">
+                  <li>
+                    <a
+                      href="mailto:support@prodsynth.com"
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      support@prodsynth.com
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://github.com/homgorn/prodsynth-monorepo/issues"
+                      className="text-muted-foreground hover:text-foreground"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Report Issue
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://github.com/homgorn/prodsynth-monorepo/discussions"
+                      className="text-muted-foreground hover:text-foreground"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Discussions
                     </a>
                   </li>
                 </ul>
