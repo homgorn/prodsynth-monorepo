@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "marketplace": "Marketplace",
+    "docs": "Documentation",
+    "blog": "Blog",
+    "login": "Log In",
+    "signup": "Sign Up Free"
+  },
+  "hero": {
+    "headline": "Turn Any Repo Into a Product in 5 Minutes",
+    "subheadline": "AI-powered synthesis engine transforms repositories into deployable SaaS products. Based on BMAD methodology with 12 intelligent agents.",
+    "cta_primary": "Start Building Free",
+    "cta_secondary": "Watch Demo",
+    "trusted_by": "Trusted by 500+ engineering teams"
+  },
+  "features": {
+    "title": "6 Pillars of Product Synthesis",
+    "subtitle": "Everything you need to ship faster",
+    "research": {
+      "title": "Intelligent Research",
+      "description": "AST-parse repositories, extract tech stacks, analyze dependencies, check licenses automatically."
+    },
+    "architect": {
+      "title": "C4 Architecture",
+      "description": "Generate production-ready C4 models, select optimal tech stacks, estimate risks before coding."
+    },
+    "code": {
+      "title": "Cascading Code Generation",
+      "description": "Multi-layer LLM routing from drafts to final code. $0.50 per synthesis run."
+    },
+    "test": {
+      "title": "Auto Testing",
+      "description": "pytest unit tests and Playwright E2E tests generated automatically. 80% coverage target."
+    },
+    "deploy": {
+      "title": "One-Click Deploy",
+      "description": "Deploy to Render, Fly.io, Docker, or Kubernetes with a single command."
+    },
+    "memory": {
+      "title": "Graphiti Memory",
+      "description": "Persistent graph memory across synthesis runs. Reuse patterns, accelerate future builds."
+    }
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Start free. Scale as you grow.",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "period": "forever",
+      "features": ["3 projects", "1GB graph storage", "Community support", "$0.50/synthesis"]
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$49",
+      "period": "per month",
+      "features": ["Unlimited projects", "100GB storage", "Priority support", "API access", "Team collaboration"]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "Custom",
+      "period": "contact us",
+      "features": ["Everything in Pro", "SSO/SAML", "Dedicated support", "SLA 99.9%", "Custom agents"]
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "projects": "Projects",
+    "create_project": "Create Project",
+    "no_projects": "No projects yet",
+    "no_projects_hint": "Paste a GitHub URL or describe your idea to get started."
+  },
+  "marketplace": {
+    "title": "Product Templates",
+    "search": "Search templates...",
+    "categories": {
+      "all": "All",
+      "saas": "SaaS",
+      "api": "API",
+      "dashboard": "Dashboard",
+      "favorites": "Favorites"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "deploy": "Deploy",
+    "generate": "Generate",
+    "synthesis": "Synthesis",
+    "ready": "Ready"
+  }
+}

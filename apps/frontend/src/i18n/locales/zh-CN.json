@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "features": "功能",
+    "pricing": "定价",
+    "marketplace": "市场",
+    "docs": "文档",
+    "blog": "博客",
+    "login": "登录",
+    "signup": "免费注册"
+  },
+  "hero": {
+    "headline": "5分钟内将任何仓库转化为产品",
+    "subheadline": "AI驱动的合成引擎将仓库转换为可部署的SaaS产品。基于BMAD方法论，使用12个智能代理。",
+    "cta_primary": "免费开始",
+    "cta_secondary": "观看演示",
+    "trusted_by": "500+工程团队信赖"
+  },
+  "features": {
+    "title": "产品合成的6大支柱",
+    "subtitle": "快速交付所需的一切",
+    "research": {
+      "title": "智能研究",
+      "description": "AST解析仓库，提取技术栈，分析依赖项，自动检查许可证。"
+    },
+    "architect": {
+      "title": "C4架构",
+      "description": "生成production-ready的C4模型，选择最优技术栈，在编码前评估风险。"
+    },
+    "code": {
+      "title": "级联代码生成",
+      "description": "多层LLM路由，从草稿到最终代码。每次合成$0.50。"
+    },
+    "test": {
+      "title": "自动测试",
+      "description": "自动生成pytest单元测试和Playwright E2E测试。目标覆盖率80%。"
+    },
+    "deploy": {
+      "title": "一键部署",
+      "description": "单个命令部署到Render、Fly.io、Docker或Kubernetes。"
+    },
+    "memory": {
+      "title": "Graphiti记忆",
+      "description": "跨合成运行持久化图谱记忆。复用模式，加速未来构建。"
+    }
+  },
+  "pricing": {
+    "title": "简单透明的定价",
+    "subtitle": "免费开始，按需扩展。",
+    "free": {
+      "name": "免费版",
+      "price": "$0",
+      "period": "永久",
+      "features": ["3个项目", "1GB图谱存储", "社区支持", "$0.50/合成"]
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$49",
+      "period": "每月",
+      "features": ["无限项目", "100GB存储", "优先支持", "API访问", "团队协作"]
+    },
+    "enterprise": {
+      "name": "企业版",
+      "price": "定制",
+      "period": "联系我们",
+      "features": ["Pro全部功能", "SSO/SAML", "专属支持", "SLA 99.9%", "自定义代理"]
+    }
+  },
+  "dashboard": {
+    "welcome": "欢迎回来",
+    "projects": "项目",
+    "create_project": "创建项目",
+    "no_projects": "暂无项目",
+    "no_projects_hint": "粘贴GitHub URL或描述您的想法开始使用。"
+  },
+  "marketplace": {
+    "title": "产品模板",
+    "search": "搜索模板...",
+    "categories": {
+      "all": "全部",
+      "saas": "SaaS",
+      "api": "API",
+      "dashboard": "仪表盘",
+      "favorites": "收藏"
+    }
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "deploy": "部署",
+    "generate": "生成",
+    "synthesis": "合成",
+    "ready": "就绪"
+  }
+}
