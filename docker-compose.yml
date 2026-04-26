@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Neo4j for Graphiti (Product DNA, Context Graphs)
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: prodsynth-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/prodsynth123
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - prodsynth-net
+
+  # Redis for caching + NATS Streams (message queue)
+  redis:
+    image: redis:7-alpine
+    container_name: prodsynth-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - prodsynth-net
+
+  # PostgreSQL for metadata (users, projects, settings)
+  postgres:
+    image: postgres:16-alpine
+    container_name: prodsynth-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=prodsynth
+      - POSTGRES_PASSWORD=prodsynth123
+      - POSTGRES_DB=prodsynth
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - prodsynth-net
+
+  # Grafana Loki for logs
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: prodsynth-loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - prodsynth-net
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: prodsynth-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - prodsynth-net
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    container_name: prodsynth-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - prodsynth-net
+
+  # Backend (FastAPI + gRPC)
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: prodsynth-backend
+    ports:
+      - "8000:8000"
+      - "50051:50051"  # gRPC
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=prodsynth123
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://prodsynth:prodsynth123@postgres:5432/prodsynth
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GRAPHITI_TELEMETRY_ENABLED=false
+    depends_on:
+      - neo4j
+      - redis
+      - postgres
+    networks:
+      - prodsynth-net
+    volumes:
+      - ./apps/backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: prodsynth-frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - prodsynth-net
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+
+volumes:
+  neo4j_data:
+  redis_data:
+  postgres_data:
+  grafana_data:
+  prometheus_data:
+
+networks:
+  prodsynth-net:
+    driver: bridge

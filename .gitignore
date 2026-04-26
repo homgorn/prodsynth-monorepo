@@ -1,0 +1,110 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+MANIFEST
+.env
+.venv/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node.js / Next.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npmrc
+.npx/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+turbo-debug.log*
+
+# Next.js
+.next/
+out/
+dist/
+build/
+.next/static/chunks/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+.next/
+out/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Coverage
+coverage/
+*.coverage
+.coverage.*
+coverage.*
+htmlcov/
+.pytest_cache/
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Sentry
+.sentryclirc
+.sentry-native/
+
+# Grafana
+grafana-data/
+
+# Temp files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Turbo
+.turbo/
