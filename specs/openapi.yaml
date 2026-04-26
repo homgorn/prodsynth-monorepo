@@ -184,6 +184,55 @@ paths:
               items:
                 $ref: '#/components/schemas/Template'
 
+  /api/v1/templates/{template_id}:
+    get:
+      tags: [Marketplace]
+      summary: Get template details
+      description: Get detailed information about a specific template
+      parameters:
+        - name: template_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Template identifier
+      responses:
+        '200':
+          description: Template details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Template'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/marketplace/purchase:
+    post:
+      tags: [Marketplace]
+      summary: Purchase template
+      description: Purchase and deploy a template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+      responses:
+        '200':
+          description: Template purchased and deployed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResult'
+        '402':
+          description: Payment required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   /webhooks/product-ready:
     post:
       tags: [Webhooks]
