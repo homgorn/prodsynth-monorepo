@@ -19,6 +19,7 @@ import {
   Heart,
   Filter,
   SlidersHorizontal,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -323,7 +324,232 @@ export default function MarketplacePage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredTemplates
                 .filter((t) => t.category === "saas")
-                .map(/* render same card */)}
+                .map((template) => (
+                  <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-5 w-5 text-primary" />
+                          <CardTitle className="text-xl">{template.name}</CardTitle>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => toggleFavorite(template.id)}
+                        >
+                          <Heart
+                            className={`h-4 w-4 ${
+                              favorites.includes(template.id) ? "fill-red-500 text-red-500" : ""
+                            }`}
+                          />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+                        <Play className="h-8 w-8 text-muted-foreground/50" />
+                      </AspectRatio>
+                      <p className="text-sm text-muted-foreground">{template.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {template.tech_stack.map((tech, i) => (
+                          <Badge key={i} variant="secondary">{tech}</Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-500" />
+                          <span className="font-medium">{template.rating}</span>
+                          <span className="text-muted-foreground">({template.downloads} downloads)</span>
+                        </div>
+                        {template.price > 0 ? (
+                          <span className="font-bold">${template.price}</span>
+                        ) : (
+                          <Badge variant="outline">Free</Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex gap-2">
+                      <Button className="flex-1" asChild>
+                        <Link href={`/marketplace/${template.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />Preview
+                        </Link>
+                      </Button>
+                      <Button className="flex-1" variant="outline" asChild>
+                        <Link href={`/dashboard?template=${template.id}`}>
+                          <Download className="mr-2 h-4 w-4" />Use Template
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="api">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredTemplates
+                .filter((t) => t.category === "api")
+                .map((template) => (
+                  <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          <Code className="h-5 w-5 text-primary" />
+                          <CardTitle className="text-xl">{template.name}</CardTitle>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => toggleFavorite(template.id)}>
+                          <Heart className={`h-4 w-4 ${favorites.includes(template.id) ? "fill-red-500 text-red-500" : ""}`} />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+                        <Play className="h-8 w-8 text-muted-foreground/50" />
+                      </AspectRatio>
+                      <p className="text-sm text-muted-foreground">{template.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {template.tech_stack.map((tech, i) => (
+                          <Badge key={i} variant="secondary">{tech}</Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-500" />
+                          <span className="font-medium">{template.rating}</span>
+                          <span className="text-muted-foreground">({template.downloads} downloads)</span>
+                        </div>
+                        {template.price > 0 ? (
+                          <span className="font-bold">${template.price}</span>
+                        ) : (
+                          <Badge variant="outline">Free</Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex gap-2">
+                      <Button className="flex-1" asChild>
+                        <Link href={`/marketplace/${template.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />Preview
+                        </Link>
+                      </Button>
+                      <Button className="flex-1" variant="outline" asChild>
+                        <Link href={`/dashboard?template=${template.id}`}>
+                          <Download className="mr-2 h-4 w-4" />Use Template
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="dashboard">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredTemplates
+                .filter((t) => t.category === "dashboard")
+                .map((template) => (
+                  <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-primary" />
+                          <CardTitle className="text-xl">{template.name}</CardTitle>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => toggleFavorite(template.id)}>
+                          <Heart className={`h-4 w-4 ${favorites.includes(template.id) ? "fill-red-500 text-red-500" : ""}`} />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+                        <Play className="h-8 w-8 text-muted-foreground/50" />
+                      </AspectRatio>
+                      <p className="text-sm text-muted-foreground">{template.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {template.tech_stack.map((tech, i) => (
+                          <Badge key={i} variant="secondary">{tech}</Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-500" />
+                          <span className="font-medium">{template.rating}</span>
+                          <span className="text-muted-foreground">({template.downloads} downloads)</span>
+                        </div>
+                        {template.price > 0 ? (
+                          <span className="font-bold">${template.price}</span>
+                        ) : (
+                          <Badge variant="outline">Free</Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex gap-2">
+                      <Button className="flex-1" asChild>
+                        <Link href={`/marketplace/${template.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />Preview
+                        </Link>
+                      </Button>
+                      <Button className="flex-1" variant="outline" asChild>
+                        <Link href={`/dashboard?template=${template.id}`}>
+                          <Download className="mr-2 h-4 w-4" />Use Template
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="favorites">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredTemplates
+                .filter((t) => favorites.includes(t.id))
+                .map((template) => (
+                  <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <CardTitle className="text-xl">{template.name}</CardTitle>
+                        <Button variant="ghost" size="icon" onClick={() => toggleFavorite(template.id)}>
+                          <Heart className={`h-4 w-4 fill-red-500 text-red-500`} />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+                        <Play className="h-8 w-8 text-muted-foreground/50" />
+                      </AspectRatio>
+                      <p className="text-sm text-muted-foreground">{template.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {template.tech_stack.map((tech, i) => (
+                          <Badge key={i} variant="secondary">{tech}</Badge>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-500" />
+                          <span className="font-medium">{template.rating}</span>
+                          <span className="text-muted-foreground">({template.downloads} downloads)</span>
+                        </div>
+                        {template.price > 0 ? (
+                          <span className="font-bold">${template.price}</span>
+                        ) : (
+                          <Badge variant="outline">Free</Badge>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex gap-2">
+                      <Button className="flex-1" asChild>
+                        <Link href={`/marketplace/${template.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />Preview
+                        </Link>
+                      </Button>
+                      <Button className="flex-1" variant="outline" asChild>
+                        <Link href={`/dashboard?template=${template.id}`}>
+                          <Download className="mr-2 h-4 w-4" />Use Template
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
             </div>
           </TabsContent>
         </Tabs>
