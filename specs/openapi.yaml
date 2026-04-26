@@ -1,0 +1,470 @@
+openapi: 3.1.0
+info:
+  title: ProdSynth API
+  description: |
+    AI-Native Product Synthesis Engine API.
+    Turn any repository into a working product in 5 minutes.
+  version: 0.1.0
+  contact:
+    name: ProdSynth Support
+    url: https://prodsynth.com/support
+    email: support@prodsynth.com
+  license:
+    name: MIT
+    url: https://github.com/prodsynth/monorepo/blob/main/LICENSE
+
+servers:
+  - url: https://api.prodsynth.com
+    description: Production server
+  - url: https://staging-api.prodsynth.com
+    description: Staging server
+  - url: http://localhost:8000
+    description: Local development server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      description: Check API health status
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /api/v1/analyze:
+    post:
+      tags: [Analysis]
+      summary: Analyze repository
+      description: |
+        Analyze a repository and build knowledge graph.
+        Uses AST parsing and LLM extraction.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+      responses:
+        '200':
+          description: Analysis started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/synthesize:
+    post:
+      tags: [Synthesis]
+      summary: Start product synthesis
+      description: |
+        Start full product synthesis pipeline.
+        Cascade: Research → Architect → Code → Test → Deploy.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesizeRequest'
+      responses:
+        '200':
+          description: Synthesis started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SynthesizeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          description: Token budget exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/graph/{graph_id}:
+    get:
+      tags: [Graph]
+      summary: Get product graph
+      description: Retrieve product graph (nodes + edges) from Graphiti/Neo4j
+      parameters:
+        - name: graph_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Graph identifier
+      responses:
+        '200':
+          description: Graph retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraphResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/deploy:
+    post:
+      tags: [Deploy]
+      summary: Deploy synthesized product
+      description: Deploy product to target (Render, Fly.io, Docker, Kubernetes)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeployRequest'
+      responses:
+        '200':
+          description: Deployment started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/agents/status:
+    get:
+      tags: [Agents]
+      summary: Get agent status
+      description: Get status of all agents in the pipeline
+      responses:
+        '200':
+          description: Agent status retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                $ref: '#/components/schemas/AgentStatus'
+
+  /api/v1/templates:
+    get:
+      tags: [Marketplace]
+      summary: List available templates
+      description: Get list of available product templates
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by category (saas, api, dashboard)
+      responses:
+        '200':
+          description: Templates retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                $ref: '#/components/schemas/Template'
+
+  /webhooks/product-ready:
+    post:
+      tags: [Webhooks]
+      summary: Product ready notification
+      description: Webhook called when product synthesis is complete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPayload'
+      responses:
+        '200':
+          description: Webhook received successfully
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for API authentication
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+        service:
+          type: string
+        version:
+          type: string
+      required: [status, service, version]
+
+    AnalyzeRequest:
+      type: object
+      properties:
+        repo_url:
+          type: string
+          format: uri
+          example: https://github.com/user/repo
+        depth:
+          type: string
+          enum: [shallow, deep]
+          default: shallow
+        include_patterns:
+          type: array
+          items:
+            type: string
+          example: ["*.py", "*.ts"]
+      required: [repo_url]
+
+    AnalyzeResponse:
+      type: object
+      properties:
+        graph_id:
+          type: string
+          example: graph_12345
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        summary:
+          type: string
+        tech_stack:
+          type: array
+          items:
+            type: string
+        risks:
+          type: array
+          items:
+            type: string
+      required: [graph_id, status]
+
+    SynthesizeRequest:
+      type: object
+      properties:
+        graph_id:
+          type: string
+        target:
+          type: string
+          enum: [saas, api, dashboard, full]
+          default: saas
+        preferences:
+          type: object
+          properties:
+            lang:
+              type: string
+              default: python
+            framework:
+              type: string
+          example: {"lang": "python", "framework": "fastapi"}
+        token_budget:
+          type: number
+          default: 0.50
+          description: Max $ cost per run
+      required: [graph_id]
+
+    SynthesizeResponse:
+      type: object
+      properties:
+        project_id:
+          type: string
+          example: proj_67890
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        steps:
+          type: array
+          items:
+            type: string
+          example: [Research, Architect, Code, Test, Deploy]
+        cost:
+          type: number
+          description: Actual cost in USD
+      required: [project_id, status, steps]
+
+    GraphResponse:
+      type: object
+      properties:
+        graph_id:
+          type: string
+        nodes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              properties:
+                type: object
+        edges:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              from:
+                type: string
+              to:
+                type: string
+              type:
+                type: string
+      required: [graph_id, nodes, edges]
+
+    DeployRequest:
+      type: object
+      properties:
+        project_id:
+          type: string
+        target:
+          type: string
+          enum: [render, fly, docker, kubernetes, vercel]
+          default: docker
+        env_vars:
+          type: object
+          additionalProperties:
+            type: string
+          example: {"DATABASE_URL": "postgres://...", "REDIS_URL": "redis://..."}
+      required: [project_id, target]
+
+    DeployResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://my-product.onrender.com
+        status:
+          type: string
+          enum: [pending, deploying, deployed, failed]
+        logs_url:
+          type: string
+          format: uri
+      required: [url, status]
+
+    AgentStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ResearchAgent
+        status:
+          type: string
+          enum: [idle, running, completed, failed]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        cost:
+          type: number
+      required: [name, status]
+
+    Template:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [saas, api, dashboard, full]
+        tech_stack:
+          type: array
+          items:
+            type: string
+        preview_url:
+          type: string
+          format: uri
+      required: [id, name, description, category]
+
+    WebhookPayload:
+      type: object
+      properties:
+        event:
+          type: string
+          enum: [product.ready, product.failed]
+        project_id:
+          type: string
+        url:
+          type: string
+          format: uri
+        status:
+          type: string
+      required: [event, project_id]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+      required: [error, code]
+
+  responses:
+    BadRequest:
+      description: Bad request (missing required fields)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized (invalid or missing token)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+webhooks:
+  product-ready:
+    post:
+      summary: Product synthesis complete
+      description: Triggered when product synthesis is complete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPayload'
+      responses:
+        '200':
+          description: Webhook received
